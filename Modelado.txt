@@ -1,0 +1,36 @@
+public enum estadosEnvio{Pendiente,AsignadoRepartidor,EnCamino,Entregado}
+Logica
+	List<Persona> Destinatarios
+	List<Repartidor> Repartidores
+	List<Envio> Envios
+	Destinatario BuscarDestinatario(int dni)
+	short CargarNuevoPedido(int dniDestinatario,DateTime fechaEstimada,string descripcion)
+	bool ActualizarEnvio(string codigoSeguimiento)
+	double CalcularDistancia(this double latitud, double longitud)
+	Repartidor AsignarRepartidor(Destinatario desrinatario)
+	List<RepartidorLista> CrearListaRepartidores(DateTime desde,DateTime hasta)
+Envio
+	string Numero
+	Destinatario
+	Repartidor
+	estadosEnvio Estado
+	DateTime FechaEstimada
+	string Decripcion
+	DateTime FechaEntrega
+Persona
+	int Dni
+	string NombreApellido
+	short CP
+	double Latitud
+	double Longitud
+	int Telefono
+Repartidor : Persona
+	byte Comision
+RepartidorListado
+	string NombreApellido
+	double TotalGanado
+	short CantidadEnvios
+	
+
+	
+	
