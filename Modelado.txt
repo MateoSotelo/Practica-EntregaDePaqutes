@@ -7,7 +7,7 @@ Logica
 	short CargarNuevoPedido(int dniDestinatario,DateTime fechaEstimada,string descripcion)
 	bool ActualizarEnvio(string codigoSeguimiento)
 	double CalcularDistancia(this double latitud, double longitud)
-	Repartidor AsignarRepartidor(Destinatario desrinatario)
+	Repartidor AsignarRepartidor(Envio envio)
 	List<RepartidorLista> CrearListaRepartidores(DateTime desde,DateTime hasta)
 Envio
 	string Numero

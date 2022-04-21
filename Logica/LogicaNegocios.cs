@@ -61,18 +61,45 @@ namespace Logica
             }
             
         }
-        public static double CalcularDistancia(this Posicion posicionRepartidor,Posicion posicionDestinatario)
+        public Repartidor AsignarReparidor(Envio envio)
         {
-            double distance = 0;
-            double EarthRadius = 63710000;
-            double Lat = (posicionDestinatario.Latitud - posicionRepartidor.Latitud) * (Math.PI / 180);
-            double Lon = (posicionDestinatario.Longitud - posicionRepartidor.Longitud) * (Math.PI / 180);
-            double a = Math.Sin(Lat / 2) * Math.Sin(Lat / 2) + Math.Cos(posicionRepartidor.Latitud * (Math.PI / 180)) * Math.Cos(posicionDestinatario.Latitud * (Math.PI / 180)) * Math.Sin(Lon / 2) * Math.Sin(Lon / 2);
-            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-            distance = EarthRadius * c;
-            return distance;
+            double DistanciaMinima = double.MaxValue;
+            Repartidor repartidorAsignado = null;
+
+            foreach (Repartidor repartidor in Repartidores)
+            {
+                if (DistanciaMinima > Extension.CalcularDistancia(repartidor.Posicion,envio.Destinatario.Posicion))
+                {
+                    DistanciaMinima = Extension.CalcularDistancia(repartidor.Posicion, envio.Destinatario.Posicion);
+                    repartidorAsignado = repartidor;
+                }
+            }
+
+            if (repartidorAsignado == null)
+            {
+                throw new Exception("Repartidor no encontrado");
+            }
+            else
+            {
+                envio.Repartidor = repartidorAsignado;
+                envio.Estado = estadosEnvios.AsignadoRepartidor;
+                return repartidorAsignado;
+            }
         }
+        public List<Repartidor> CrarListaRepartidores(DateTime desde,DateTime hasta)
+        {
+            List<Repartidor> listadoReparidores = new List<Repartidor>();
+            var listaEnviosFiltrada = Envios.FindAll(x => x.Estado == estadosEnvios.Entregado && x.FechaEntrega <= hasta && x.FechaEntrega >= desde);
 
+            foreach (Envio envio in listaEnviosFiltrada)
+            {
+                if (!listadoReparidores.Contains(envio.Repartidor))
+                {
+                    listadoReparidores.Add(envio.Repartidor);
+                }
+            }
 
+            return listadoReparidores;
+        }
     }
 }
